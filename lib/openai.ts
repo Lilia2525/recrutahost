@@ -212,4 +212,4 @@ export async function transcribeAudio(audioFile: File): Promise<string> {
   return transcription.text
 }
 
-export { openai }
+export { getOpenAI }
