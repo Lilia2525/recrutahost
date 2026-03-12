@@ -1,9 +1,11 @@
 import OpenAI from 'openai'
 import { AIFormAnalysis, AICallAnalysis, AIExtractResult, FormQuestion, Candidate, JobOffer, AIRulesConfig } from './types'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+function getOpenAI() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
 
 // ─────────────────────────────────────────────────────────────
 // 1. EXTRACT CV / EMAIL DATA
@@ -33,7 +35,7 @@ Extrae la información disponible y responde ÚNICAMENTE en formato JSON válido
 }
 Si no encuentras algún campo, usa null o array vacío según corresponda.`
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.1,
@@ -109,7 +111,7 @@ INSTRUCCIONES:
   "summary": "Resumen en 2-3 frases para Dori, en español, lenguaje claro y directo"
 }`
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.2,
@@ -178,7 +180,7 @@ INSTRUCCIONES:
   "summary": "Resumen en 2-3 frases para Dori, en español, lenguaje claro y directo"
 }`
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.2,
@@ -202,7 +204,7 @@ INSTRUCCIONES:
 // 4. TRANSCRIBE AUDIO (Whisper)
 // ─────────────────────────────────────────────────────────────
 export async function transcribeAudio(audioFile: File): Promise<string> {
-  const transcription = await openai.audio.transcriptions.create({
+  const transcription = await getOpenAI().audio.transcriptions.create({
     file: audioFile,
     model: 'whisper-1',
     language: 'es',
