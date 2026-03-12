@@ -437,7 +437,7 @@ export default function ConfiguracionPage() {
           <div>
             <h4 className="text-sm text-white font-medium mb-3">Pesos de evaluación (total: 100%)</h4>
             <div className="grid grid-cols-2 gap-4">
-              {Object.entries(aiRules.weights).map(([key, value]) => (
+              {Object.entries(aiRules.weights ?? {}).map(([key, value]) => (
                 <div key={key}>
                   <label className="block text-xs text-[#6b7280] mb-1 capitalize">
                     {key} ({value}%)
@@ -465,7 +465,7 @@ export default function ConfiguracionPage() {
             <div>
               <h4 className="text-sm text-white font-medium mb-2">Palabras clave positivas</h4>
               <div className="flex flex-wrap gap-1.5 mb-2">
-                {aiRules.required_keywords.map((kw, i) => (
+                {(aiRules.required_keywords ?? []).map((kw, i) => (
                   <span
                     key={i}
                     className="flex items-center gap-1 px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded-full"
@@ -475,7 +475,7 @@ export default function ConfiguracionPage() {
                       onClick={() =>
                         setAiRules({
                           ...aiRules,
-                          required_keywords: aiRules.required_keywords.filter((_, j) => j !== i),
+                          required_keywords: (aiRules.required_keywords ?? []).filter((_, j) => j !== i),
                         })
                       }
                     >
@@ -492,7 +492,7 @@ export default function ConfiguracionPage() {
                     if (e.key === 'Enter' && newKeyword.required.trim()) {
                       setAiRules({
                         ...aiRules,
-                        required_keywords: [...aiRules.required_keywords, newKeyword.required.trim()],
+                        required_keywords: [...(aiRules.required_keywords ?? []), newKeyword.required.trim()],
                       })
                       setNewKeyword({ ...newKeyword, required: '' })
                     }
@@ -505,7 +505,7 @@ export default function ConfiguracionPage() {
             <div>
               <h4 className="text-sm text-white font-medium mb-2">Palabras clave negativas</h4>
               <div className="flex flex-wrap gap-1.5 mb-2">
-                {aiRules.disqualifying_keywords.map((kw, i) => (
+                {(aiRules.disqualifying_keywords ?? []).map((kw, i) => (
                   <span
                     key={i}
                     className="flex items-center gap-1 px-2 py-0.5 bg-red-500/10 text-red-400 text-xs rounded-full"
@@ -515,7 +515,7 @@ export default function ConfiguracionPage() {
                       onClick={() =>
                         setAiRules({
                           ...aiRules,
-                          disqualifying_keywords: aiRules.disqualifying_keywords.filter((_, j) => j !== i),
+                          disqualifying_keywords: (aiRules.disqualifying_keywords ?? []).filter((_, j) => j !== i),
                         })
                       }
                     >
@@ -533,7 +533,7 @@ export default function ConfiguracionPage() {
                       setAiRules({
                         ...aiRules,
                         disqualifying_keywords: [
-                          ...aiRules.disqualifying_keywords,
+                          ...(aiRules.disqualifying_keywords ?? []),
                           newKeyword.disqualifying.trim(),
                         ],
                       })

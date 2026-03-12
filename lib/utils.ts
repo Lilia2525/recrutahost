@@ -78,8 +78,9 @@ export function extractEmailText(emailBody: string): string {
   return emailBody.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 }
 
-export function buildFormUrl(offerId: string, baseUrl: string): string {
-  return `${baseUrl}/aplicar/${offerId}`
+export function buildFormUrl(offerId: string, baseUrl?: string): string {
+  const base = baseUrl ?? process.env.NEXT_PUBLIC_APP_URL ?? (typeof window !== 'undefined' ? window.location.origin : '')
+  return `${base}/aplicar/${offerId}`
 }
 
 export function interpolateTemplate(

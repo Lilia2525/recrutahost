@@ -47,10 +47,9 @@ export async function POST(request: NextRequest) {
       full_name: aiData?.full_name ?? fullName,
       email,
       phone: aiData?.phone ?? null,
-      cv_text: text || html,
-      ai_score: aiData?.initial_score ?? null,
+      cv_extracted_text: text || html,
       ai_summary: aiData?.summary ?? null,
-      stage: 'recibido',
+      stage: 'propuesta_recibida',
       source: 'email_inbound',
     })
     .select('id')

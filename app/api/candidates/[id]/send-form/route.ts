@@ -23,11 +23,11 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
   const restaurantName = user.user_metadata?.restaurant_name ?? 'Nuestro restaurante'
 
   const sent = await sendFormLinkEmail({
-    to: candidate.email,
+    candidateEmail: candidate.email,
     candidateName: candidate.full_name,
     jobTitle: candidate.job_offer?.title ?? 'el puesto',
     restaurantName,
-    formLink,
+    formUrl: formLink,
   })
 
   if (!sent) {

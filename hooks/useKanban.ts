@@ -24,7 +24,7 @@ export function useKanban(candidates: Candidate[]): UseKanbanReturn {
   const columns = useMemo<KanbanColumn[]>(() => {
     return KANBAN_STAGES.map((stage) => ({
       id: stage.id,
-      label: stage.label,
+      label: stage.title,
       candidates: candidates.filter((c) => c.stage === stage.id),
     }))
   }, [candidates])

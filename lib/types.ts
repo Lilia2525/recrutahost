@@ -88,15 +88,20 @@ export interface Candidate {
   updated_at: string
   // Joined
   job_offer?: JobOffer
+  call_count?: number
+  form_responses?: FormResponse[]
+  call_records?: CallRecord[]
 }
 
 export interface FormQuestion {
   id: string
   job_offer_id: string
   question_text: string
+  question: string
   question_type: QuestionType
   options: string[] | null
   is_required: boolean
+  is_active: boolean
   order_index: number
   ai_weight: number
   ai_ideal_answer: string | null
@@ -146,8 +151,10 @@ export interface EmailTemplate {
   id: string
   user_id: string
   template_type: EmailTemplateType
+  type: string
   subject: string
   body_html: string
+  body: string
   created_at: string
   updated_at: string
 }
@@ -159,6 +166,16 @@ export interface AIRulesConfig {
   auto_discard_threshold?: number
   auto_qualify_threshold?: number
   custom_rules?: string[]
+  min_score_to_advance?: number
+  auto_discard_below?: number
+  required_keywords?: string[]
+  disqualifying_keywords?: string[]
+  weights?: {
+    experience?: number
+    availability?: number
+    motivation?: number
+    communication?: number
+  }
 }
 
 export interface AIRule {

@@ -62,10 +62,10 @@ export function CandidateCard({ candidate, index, onClick }: CandidateCardProps)
                   <FileText size={13} className="text-[#6b7280]" />
                 </span>
               )}
-              {candidate.call_count > 0 && (
+              {(candidate.call_count ?? 0) > 0 && (
                 <span title={`${candidate.call_count} llamada(s)`} className="flex items-center gap-0.5">
                   <Phone size={13} className="text-[#6b7280]" />
-                  {candidate.call_count > 1 && (
+                  {(candidate.call_count ?? 0) > 1 && (
                     <span className="text-[10px] text-[#6b7280]">{candidate.call_count}</span>
                   )}
                 </span>

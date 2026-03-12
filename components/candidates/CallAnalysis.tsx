@@ -44,7 +44,7 @@ export function CallAnalysis({ callRecords }: CallAnalysisProps) {
               {record.ai_recommendation && (
                 <RecommendationBadge
                   recommendation={
-                    record.ai_recommendation === 'DIA_DE_PRUEBA'
+                    (record.ai_recommendation as string) === 'DIA_DE_PRUEBA'
                       ? 'recommended'
                       : 'not_recommended'
                   }

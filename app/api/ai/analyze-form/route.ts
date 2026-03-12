@@ -33,14 +33,11 @@ export async function POST(request: NextRequest) {
   const responses = candidate.form_responses?.map((r: any) => r.answer ?? '') ?? []
 
   const analysis = await analyzeFormResponses({
-    candidate: {
-      full_name: candidate.full_name,
-      cv_text: candidate.cv_text,
-    },
+    candidate,
     jobOffer: candidate.job_offer,
     questions,
     responses,
-    cvText: candidate.cv_text,
+    cvText: candidate.cv_extracted_text ?? undefined,
     rulesConfig: rulesData ?? undefined,
   })
 

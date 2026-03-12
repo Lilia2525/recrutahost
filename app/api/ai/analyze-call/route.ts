@@ -31,10 +31,7 @@ export async function POST(request: NextRequest) {
   }
 
   const analysis = await analyzeCallTranscription({
-    candidate: {
-      full_name: candidate.full_name,
-      cv_text: candidate.cv_text,
-    },
+    candidate,
     jobOffer: candidate.job_offer,
     transcription: callRecord.transcription,
     interviewerNotes,

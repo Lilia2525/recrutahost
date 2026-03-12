@@ -48,7 +48,7 @@ export default function AplicarPage() {
       if (qs) {
         setQuestions(qs)
         const init: Record<string, string> = {}
-        qs.forEach((q) => { init[q.id] = '' })
+        qs.forEach((q: FormQuestion) => { init[q.id] = '' })
         setAnswers(init)
       }
 
@@ -76,8 +76,8 @@ export default function AplicarPage() {
           .update({
             full_name: personalData.full_name,
             phone: personalData.phone,
-            cv_text: personalData.cv_text,
-            stage: 'formulario_completado',
+            cv_extracted_text: personalData.cv_text,
+            stage: 'evaluado_ia',
             form_completed_at: new Date().toISOString(),
           })
           .eq('id', candidateId)
@@ -254,7 +254,7 @@ export default function AplicarPage() {
               {questions.map((q, i) => (
                 <div key={q.id}>
                   <label className="block text-sm text-white mb-1.5">
-                    {i + 1}. {q.question}
+                    {i + 1}. {q.question_text}
                   </label>
                   <textarea
                     value={answers[q.id] ?? ''}
