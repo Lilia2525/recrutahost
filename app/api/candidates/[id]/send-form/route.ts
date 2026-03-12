@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase'
 import { sendFormLinkEmail } from '@/lib/email'
 
-type Params = { params: { id: string } }
-
-export async function POST(_request: NextRequest, { params }: Params) {
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -12,7 +11,7 @@ export async function POST(_request: NextRequest, { params }: Params) {
   const { data: candidate, error } = await supabase
     .from('candidates')
     .select('*, job_offer:job_offers(title)')
-    .eq('id', params.id)
+    .eq('id', id)
     .eq('user_id', user.id)
     .single()
 
@@ -39,7 +38,7 @@ export async function POST(_request: NextRequest, { params }: Params) {
   await supabase
     .from('candidates')
     .update({ stage: 'formulario_enviado', form_sent_at: new Date().toISOString() })
-    .eq('id', params.id)
+    .eq('id', id)
 
   return NextResponse.json({ success: true })
 }
