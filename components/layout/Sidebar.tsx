@@ -12,6 +12,7 @@ import {
   ChevronRight,
   LogOut,
   Star,
+  BookOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase'
@@ -23,6 +24,7 @@ const navItems = [
   { href: '/candidatos', label: 'Candidatos', icon: Users },
   { href: '/ofertas', label: 'Ofertas', icon: Briefcase },
   { href: '/configuracion', label: 'Configuración', icon: Settings },
+  { href: '/guia', label: 'Guía de inicio', icon: BookOpen },
 ]
 
 export function Sidebar() {
