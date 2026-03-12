@@ -1,7 +1,9 @@
 import { Resend } from 'resend'
 import { interpolateTemplate } from './utils'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 const FROM_EMAIL = 'RecrutaHost <noreply@recrutahost.app>'
 
@@ -13,7 +15,7 @@ interface SendEmailParams {
 
 export async function sendEmail({ to, subject, html }: SendEmailParams): Promise<boolean> {
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject,
