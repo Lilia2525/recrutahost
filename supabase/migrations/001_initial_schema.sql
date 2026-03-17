@@ -189,7 +189,7 @@ CREATE POLICY "candidates_own" ON public.candidates FOR ALL USING (auth.uid() = 
 
 -- form_questions: readable publicly (for /aplicar page), writable by owner
 CREATE POLICY "form_questions_public_read" ON public.form_questions FOR SELECT USING (true);
-CREATE POLICY "form_questions_owner_write" ON public.form_questions FOR INSERT USING (
+CREATE POLICY "form_questions_owner_write" ON public.form_questions FOR INSERT WITH CHECK (
   auth.uid() = (SELECT user_id FROM public.job_offers WHERE id = job_offer_id)
 );
 CREATE POLICY "form_questions_owner_update" ON public.form_questions FOR UPDATE USING (
