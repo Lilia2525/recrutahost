@@ -8,7 +8,8 @@ import { Input } from '@/components/ui/Input'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 
-const SKIP_AUTH = process.env.NEXT_PUBLIC_SKIP_AUTH === 'true'
+const DEMO_EMAIL = 'demo@recrutahost.com'
+const DEMO_PASS = 'demo1234'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -20,7 +21,12 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
 
-    if (SKIP_AUTH) {
+    // Demo mode: accept demo credentials or any credentials when Supabase is not configured
+    const isDemoLogin = email === DEMO_EMAIL && password === DEMO_PASS
+    const isPlaceholderSupabase = process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder')
+
+    if (isDemoLogin || isPlaceholderSupabase) {
+      document.cookie = 'demo_session=true; path=/; max-age=86400'
       router.push('/dashboard')
       router.refresh()
       return

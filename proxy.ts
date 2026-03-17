@@ -4,8 +4,9 @@ import { NextResponse, type NextRequest } from 'next/server'
 const PROTECTED_ROUTES = ['/dashboard', '/candidatos', '/ofertas', '/configuracion']
 
 export async function proxy(request: NextRequest) {
+  const hasDemoSession = request.cookies.get('demo_session')?.value === 'true'
   const isPlaceholder = !process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
-  if (isPlaceholder || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SKIP_AUTH === 'true') {
+  if (hasDemoSession || isPlaceholder || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SKIP_AUTH === 'true') {
     return NextResponse.next({ request })
   }
 
