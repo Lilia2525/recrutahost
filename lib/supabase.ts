@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const IS_DEMO = process.env.NEXT_PUBLIC_SKIP_AUTH === 'true' || !supabaseUrl || supabaseUrl.includes('placeholder')
 
 // ─── MOCK CLIENT (for visual preview without real APIs) ───────
 function makeMockChain(): any {
@@ -56,13 +57,13 @@ function createMockClient(): any {
 
 // ─── BROWSER CLIENT (use in Client Components) ────────────────
 export function createClient() {
-  if (process.env.NEXT_PUBLIC_SKIP_AUTH === 'true') return createMockClient()
+  if (IS_DEMO) return createMockClient()
   return createBrowserClient(supabaseUrl, supabaseAnonKey)
 }
 
 // ─── SERVER CLIENT (use in Server Components & Route Handlers) ─
 export async function createServerSupabaseClient() {
-  if (process.env.NEXT_PUBLIC_SKIP_AUTH === 'true') return createMockClient()
+  if (IS_DEMO) return createMockClient()
   const { cookies } = await import('next/headers')
   const cookieStore = await cookies()
   return createServerClient(supabaseUrl, supabaseAnonKey, {
@@ -87,7 +88,7 @@ export async function createServerSupabaseClient() {
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 export function createServiceClient() {
-  if (process.env.NEXT_PUBLIC_SKIP_AUTH === 'true') return createMockClient()
+  if (IS_DEMO) return createMockClient()
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!serviceKey) throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set')
   return createSupabaseClient(supabaseUrl, serviceKey, {
