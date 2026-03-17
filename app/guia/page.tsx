@@ -7,15 +7,14 @@ import {
   CheckCircle2,
   Circle,
   ArrowRight,
-  Briefcase,
   FileText,
   Mail,
   Users,
   Sparkles,
-  Copy,
+  Megaphone,
+  Zap,
   ExternalLink,
 } from 'lucide-react'
-import toast from 'react-hot-toast'
 
 interface Step {
   id: number
@@ -33,94 +32,97 @@ interface Step {
 const steps: Step[] = [
   {
     id: 1,
-    title: 'Crea tu primera oferta de empleo',
+    title: 'Publica tu anuncio en Mil Anuncios',
     description:
-      'Antes de nada, necesitas crear la oferta para el puesto que quieres cubrir. Es lo que verán los candidatos.',
-    icon: <Briefcase size={20} />,
+      'Como haces siempre. Publica el anuncio del puesto con tu email y WhatsApp de contacto.',
+    icon: <Megaphone size={20} />,
     details: [
-      'Ve a "Ofertas" en el menú de la izquierda',
-      'Haz clic en "Nueva oferta"',
-      'Rellena: título del puesto, descripción y requisitos',
-      'Ejemplo: "Camarero/a de sala - Restaurante La Marina"',
-      'Dale a guardar y listo',
+      'Entra en Mil Anuncios y crea tu anuncio normalmente',
+      'Pon tu email de contacto y tu WhatsApp',
+      'Los candidatos empezaran a escribirte',
+      'Eso es lo unico que tienes que hacer manualmente',
     ],
-    action: {
-      label: 'Ir a Ofertas',
-      href: '/ofertas',
-    },
   },
   {
     id: 2,
-    title: 'Configura las preguntas del formulario',
+    title: 'Los candidatos te escriben por email',
     description:
-      'Estas son las preguntas que verán los candidatos cuando rellenen el formulario. Hazlas simples y directas.',
-    icon: <FileText size={20} />,
+      'Cuando alguien se interesa por el puesto, te escribe un email. A partir de aqui, todo es automatico.',
+    icon: <Mail size={20} />,
     details: [
-      'Ve a "Configuración" en el menú',
-      'Baja hasta "Preguntas del formulario"',
-      'Añade preguntas como:',
-      '   - "¿Tienes experiencia en hostelería?"',
-      '   - "¿Qué disponibilidad horaria tienes?"',
-      '   - "¿Por qué te interesa este puesto?"',
-      'No pongas más de 4-5 preguntas (si no, no lo rellenan)',
+      'Un candidato ve tu anuncio y te escribe',
+      'Automaticamente recibe un email de respuesta',
+      'El email le dice: "Gracias por tu interes, rellena este formulario"',
+      'El email incluye el enlace al formulario de Tally',
+      'Tu no tienes que hacer nada, es todo automatico',
     ],
-    action: {
-      label: 'Ir a Configuración',
-      href: '/configuracion',
-    },
   },
   {
     id: 3,
-    title: 'Copia el enlace del formulario',
+    title: 'El candidato rellena el formulario',
     description:
-      'Cada oferta tiene un enlace único. Ese enlace es el que enviarás a los candidatos que te contacten.',
-    icon: <Copy size={20} />,
+      'El formulario de Tally es super sencillo. Solo le pide lo basico: nombre, telefono, experiencia y disponibilidad.',
+    icon: <FileText size={20} />,
     details: [
-      'Ve a "Ofertas" y busca la oferta que creaste',
-      'Haz clic en "Copiar enlace del formulario"',
-      'El enlace se copia al portapapeles',
-      'Ese enlace es algo como: tuapp.vercel.app/aplicar/abc123',
-      'Guárdalo, lo necesitarás para el email automático',
+      'El candidato hace clic en el enlace del email',
+      'Se abre el formulario de Tally (tarda 2 minutos)',
+      'Le pregunta:',
+      '   - Nombre completo',
+      '   - Email y telefono',
+      '   - Experiencia en hosteleria',
+      '   - Disponibilidad horaria',
+      '   - Si puede incorporarse ya',
+      '   - Si tiene permiso de trabajo',
+      'Le da a enviar y listo',
     ],
-    action: {
-      label: 'Ir a Ofertas',
-      href: '/ofertas',
-    },
   },
   {
     id: 4,
-    title: 'Prepara la plantilla de email',
+    title: 'Los datos llegan aqui automaticamente',
     description:
-      'Cuando alguien te contacte por Mil Anuncios, le enviarás (manual o automáticamente) un email con el enlace al formulario.',
-    icon: <Mail size={20} />,
+      'Make.com detecta que alguien ha rellenado el formulario y envia los datos a esta app.',
+    icon: <Zap size={20} />,
     details: [
-      'Ve a "Configuración" > "Plantillas de email"',
-      'Edita la plantilla "Enlace Formulario"',
-      'El email debería decir algo como:',
-      '   "Hola {{nombre}}, gracias por tu interés en el puesto de {{puesto}}."',
-      '   "Para poder valorar tu candidatura, necesitamos que rellenes este breve formulario: {{enlace}}"',
-      '   "Es muy rápido (2 minutos). ¡Gracias!"',
-      'Guarda la plantilla',
+      'Make.com recibe los datos del formulario automaticamente',
+      'Los envia a esta app via webhook',
+      'El candidato aparece en tu tablero de "Candidatos"',
+      'Puedes ver todos sus datos de un vistazo',
+      'No tienes que copiar nada manualmente',
     ],
-    action: {
-      label: 'Ir a Configuración',
-      href: '/configuracion',
-    },
   },
   {
     id: 5,
-    title: '¡Ya está! Así funciona el flujo día a día',
+    title: 'Gestiona tus candidatos desde aqui',
     description:
-      'A partir de aquí, el proceso es muy sencillo:',
+      'En la seccion "Candidatos" tienes un tablero Kanban donde puedes mover a cada candidato por las distintas etapas.',
+    icon: <Users size={20} />,
+    details: [
+      'Propuesta Recibida: acaba de llegar',
+      'Pendiente de Llamar: tienes que llamarle',
+      'Llamada Realizada: ya hablaste con el/ella',
+      'Dia de Prueba: le invitas a un dia de prueba',
+      'Descartado: no encaja en el puesto',
+      'Solo tienes que arrastrar las tarjetas de una columna a otra',
+    ],
+    action: {
+      label: 'Ir a Candidatos',
+      href: '/candidatos',
+    },
+  },
+  {
+    id: 6,
+    title: 'Ya esta! Resumen del flujo',
+    description: 'Asi de simple es tu dia a dia con RecrutaHost:',
     icon: <Sparkles size={20} />,
     details: [
-      '1. Publicas tu anuncio en Mil Anuncios (como siempre)',
-      '2. Un candidato te escribe por email interesado',
-      '3. Le respondes con el email que tiene el enlace al formulario',
-      '4. El candidato rellena el formulario (2 min)',
-      '5. ¡Aparece automáticamente aquí en la app!',
-      '6. Puedes ver todos sus datos en "Candidatos"',
-      '7. Puedes mover candidatos por las etapas del tablero Kanban',
+      '1. Publicas anuncio en Mil Anuncios (manual, como siempre)',
+      '2. Candidato te escribe por email',
+      '3. Recibe auto-respuesta con enlace al formulario',
+      '4. Rellena el formulario de Tally (2 min)',
+      '5. Aparece aqui en la app automaticamente',
+      '6. Tu gestionas candidatos desde el tablero',
+      '',
+      'Tu solo publicas el anuncio. Todo lo demas es automatico.',
     ],
     action: {
       label: 'Ir al Dashboard',
@@ -151,10 +153,10 @@ export default function GuiaPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">
-              Guía de inicio
+              Como funciona RecrutaHost
             </h1>
             <p className="text-[#6b7280] text-sm">
-              Sigue estos pasos para tener todo listo
+              Tu asistente de seleccion de personal. Todo automatico.
             </p>
           </div>
         </div>
@@ -172,7 +174,7 @@ export default function GuiaPage() {
             />
           </div>
           <p className="text-xs text-[#4a4a4a] mt-2">
-            {completedSteps.length} de {steps.length} pasos completados
+            {completedSteps.length} de {steps.length} pasos leidos
           </p>
         </div>
       </div>
@@ -257,10 +259,12 @@ export default function GuiaPage() {
                           className={`text-sm ${
                             detail.startsWith('   ')
                               ? 'text-[#9ca3af] ml-4'
+                              : detail === ''
+                              ? 'h-2'
                               : 'text-[#d1d5db]'
                           }`}
                         >
-                          {!detail.startsWith('   ') && (
+                          {detail && !detail.startsWith('   ') && (
                             <span className="text-[#FFD700] mr-2">{'>'}</span>
                           )}
                           {detail.trim()}
@@ -290,7 +294,7 @@ export default function GuiaPage() {
                             : 'border-[#2a2a2a] text-[#6b7280] hover:text-white hover:border-[#3a3a3a]'
                         }`}
                       >
-                        {isCompleted ? 'Hecho' : 'Marcar como hecho'}
+                        {isCompleted ? 'Leido' : 'Marcar como leido'}
                       </button>
                     </div>
                   </div>
@@ -307,17 +311,17 @@ export default function GuiaPage() {
           <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-3">
             <CheckCircle2 size={32} className="text-green-400" />
           </div>
-          <h3 className="text-white font-bold text-lg">¡Todo configurado!</h3>
+          <h3 className="text-white font-bold text-lg">Ya lo tienes claro!</h3>
           <p className="text-[#9ca3af] text-sm mt-1 mb-4">
-            Ya puedes empezar a recibir candidatos. Cuando alguien rellene el formulario,
-            aparecerá automáticamente en tu panel.
+            Tu solo publicas el anuncio. Los candidatos que rellenen el formulario
+            aparecen aqui automaticamente. Facil.
           </p>
           <Link
-            href="/dashboard"
+            href="/candidatos"
             className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#FFD700] text-black font-semibold rounded-lg hover:bg-[#FFC200] transition-colors"
           >
             <Users size={16} />
-            Ir al Dashboard
+            Ver Candidatos
           </Link>
         </div>
       )}

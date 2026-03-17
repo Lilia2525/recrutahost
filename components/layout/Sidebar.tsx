@@ -22,7 +22,6 @@ import toast from 'react-hot-toast'
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/candidatos', label: 'Candidatos', icon: Users },
-  { href: '/ofertas', label: 'Ofertas', icon: Briefcase },
   { href: '/configuracion', label: 'Configuración', icon: Settings },
   { href: '/guia', label: 'Guía de inicio', icon: BookOpen },
 ]
