@@ -201,7 +201,75 @@ INSTRUCCIONES:
 }
 
 // ─────────────────────────────────────────────────────────────
-// 4. TRANSCRIBE AUDIO (Whisper)
+// 4. ANALYZE TALLY CANDIDATE (simplified - no job_offer needed)
+// ─────────────────────────────────────────────────────────────
+export async function analyzeTallyCandidate(params: {
+  candidateName: string
+  position: string
+  formSummary: string
+}): Promise<AIFormAnalysis> {
+  const { candidateName, position, formSummary } = params
+
+  const positionLabels: Record<string, string> = {
+    camarero_sala: 'Camarero/a de Sala',
+    ayudante_cocina: 'Ayudante de Cocina',
+    camarero_piso: 'Camarero/a de Piso / Limpiador/a',
+    otro: 'Puesto general hostelería',
+  }
+
+  const prompt = `Eres un experto en selección de personal para hostelería.
+Evalúa este candidato para un restaurante familiar de comida casera asturiana y mediterránea, con más de 50 años de trayectoria, gran volumen y alta rotación de clientes.
+
+CANDIDATO: ${candidateName}
+PUESTO: ${positionLabels[position] || position}
+
+RESPUESTAS DEL FORMULARIO:
+${formSummary}
+
+CRITERIOS DE EVALUACIÓN:
+- Experiencia relevante en hostelería (muy importante)
+- Disponibilidad para incorporación inmediata (importante)
+- Permiso de trabajo en España (obligatorio - sin él = descarte)
+- Habilidades específicas del puesto
+- Actitud y trabajo en equipo
+
+INSTRUCCIONES:
+1. Evalúa al candidato del 0-100
+2. Si no tiene permiso de trabajo → puntuación < 30 y DESCARTAR
+3. Identifica banderas rojas y puntos positivos
+4. Recomendación: AVANZAR (>=60) / REVISAR (30-59) / DESCARTAR (<30)
+5. Responde ÚNICAMENTE en JSON válido:
+{
+  "score": 75,
+  "breakdown": [],
+  "red_flags": ["bandera roja 1"],
+  "green_flags": ["punto positivo 1"],
+  "recommendation": "AVANZAR",
+  "summary": "Resumen en 2-3 frases claro y directo para la reclutadora"
+}`
+
+  try {
+    const response = await getOpenAI().chat.completions.create({
+      model: 'gpt-4o',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.2,
+      response_format: { type: 'json_object' },
+    })
+    return JSON.parse(response.choices[0].message.content ?? '{}') as AIFormAnalysis
+  } catch {
+    return {
+      score: 50,
+      breakdown: [],
+      red_flags: [],
+      green_flags: [],
+      recommendation: 'REVISAR',
+      summary: 'No se pudo analizar con IA. Revisa manualmente.',
+    }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// 5. TRANSCRIBE AUDIO (Whisper)
 // ─────────────────────────────────────────────────────────────
 export async function transcribeAudio(audioFile: File): Promise<string> {
   const transcription = await getOpenAI().audio.transcriptions.create({

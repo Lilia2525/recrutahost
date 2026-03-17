@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
+import { analyzeTallyCandidate } from '@/lib/openai'
 
 /**
  * Webhook endpoint for Make.com with native Tally integration.
@@ -125,10 +126,60 @@ export async function POST(request: NextRequest) {
       reason: 'Formulario Tally completado',
     })
 
+    // Auto-analyze with AI if OpenAI key is configured
+    let aiResult = null
+    if (process.env.OPENAI_API_KEY && lines) {
+      try {
+        const analysis = await analyzeTallyCandidate({
+          candidateName: nombre,
+          position,
+          formSummary: lines,
+        })
+
+        const recMap: Record<string, string> = {
+          AVANZAR: 'recommended',
+          REVISAR: 'maybe',
+          DESCARTAR: 'not_recommended',
+        }
+        const newStage = analysis.recommendation === 'DESCARTAR'
+          ? 'descartado'
+          : analysis.recommendation === 'AVANZAR'
+            ? 'evaluado_ia'
+            : 'evaluado_ia'
+
+        await supabase
+          .from('candidates')
+          .update({
+            ai_score: analysis.score,
+            ai_summary: analysis.summary,
+            ai_recommendation: recMap[analysis.recommendation] || 'maybe',
+            ai_analysis: analysis,
+            stage: newStage,
+          })
+          .eq('id', candidate.id)
+
+        await supabase.from('candidate_history').insert({
+          candidate_id: candidate.id,
+          user_id,
+          candidate_name: nombre,
+          action: 'stage_change',
+          from_stage: 'propuesta_recibida',
+          to_stage: newStage,
+          changed_by: 'ai',
+          reason: `IA: ${analysis.summary} (${analysis.score}/100)`,
+        })
+
+        aiResult = { score: analysis.score, recommendation: analysis.recommendation, summary: analysis.summary }
+      } catch (aiErr) {
+        console.error('AI analysis error (non-blocking):', aiErr)
+      }
+    }
+
     return NextResponse.json({
       success: true,
       candidateId: candidate.id,
       message: `Candidato "${nombre}" creado correctamente`,
+      ai: aiResult,
     })
   } catch (err) {
     console.error('Tally webhook error:', err)
