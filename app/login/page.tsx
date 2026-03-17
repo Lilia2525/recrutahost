@@ -8,17 +8,25 @@ import { Input } from '@/components/ui/Input'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 
+const SKIP_AUTH = process.env.NEXT_PUBLIC_SKIP_AUTH === 'true'
+
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
 
+    if (SKIP_AUTH) {
+      router.push('/dashboard')
+      router.refresh()
+      return
+    }
+
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
